@@ -30,10 +30,9 @@ jobs:
           push: true
           platforms: linux/amd64,linux/arm64
           tags: |
-            ghcr.io/${{ github.repository }}/aptly-api:latest
-            ghcr.io/${{ github.repository }}/aptly-api:${{ github.sha }}
+            ghcr.io/daedaluz/aptly-api:latest
           labels: |
-            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.source=${{ github.server_url }}/daedaluz/aptly
             org.opencontainers.image.revision=${{ github.sha }}
             org.opencontainers.image.created=${{ github.event.head_commit.timestamp || github.event.pull_request.updated_at || github.event.repository.pushed_at }}
             org.opencontainers.image.title=aptly-api
