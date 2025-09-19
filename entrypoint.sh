@@ -1,16 +1,19 @@
 #!/bin/bash
 
 # Check for gpg keys:
-GPG_KEY_NAME="${GPG_KEY_NAME:-CI_CD_Aptly}" # Default name
-GPG_KEY_EMAIL="${GPG_KEY_EMAIL:-ci-cd@localhost}" # Default email
-GPG_KEY_COMMENT="${GPG_KEY_COMMENT:-Aptly CI/CD Signing Key}" # Default comment
+GPG_KEY_NAME="${GPG_KEY_NAME:-Aptly Default}" # Default name
+GPG_KEY_EMAIL="${GPG_KEY_EMAIL:-aptly@localhost}" # Default email
+GPG_KEY_COMMENT="${GPG_KEY_COMMENT:-Aptly Default Signing Key}" # Default comment
 PUBLIC_DIR="/data/public"
 
 mkdir -p "$GNUPGHOME" "$PUBLIC_DIR"
 chmod 700 "$GNUPGHOME"
 
-# Check if a secret key for the email already exists
-if ! gpg --homedir "$GNUPGHOME" --list-secret-keys "$GPG_KEY_EMAIL" >/dev/null 2>&1; then
+# Check if a secret key for the email already exists, or import from GPG_KEY if provided
+if [ -n "$GPG_KEY" ]; then
+  echo "[entrypoint] Importing GPG key from GPG_KEY environment variable."
+  echo "$GPG_KEY" | gpg --homedir "$GNUPGHOME" --batch --import
+elif ! gpg --homedir "$GNUPGHOME" --list-secret-keys "$GPG_KEY_EMAIL" >/dev/null 2>&1; then
   echo "[entrypoint] No GPG key found for $GPG_KEY_EMAIL, generating new key..."
   cat >keygen.batch <<EOF
     Key-Type: RSA
