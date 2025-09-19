@@ -7,6 +7,10 @@ GPG_KEY_COMMENT="${GPG_KEY_COMMENT:-Aptly Default Signing Key}" # Default commen
 PUBLIC_DIR="/data/public"
 
 mkdir -p "$GNUPGHOME" "$PUBLIC_DIR"
+mkdir -p /data/public/apt/stable
+mkdir -p /data/public/apt/staging
+mkdir -p /data/public/apt/nightly
+
 chmod 700 "$GNUPGHOME"
 
 # Check if a secret key for the email already exists, or import from GPG_KEY if provided

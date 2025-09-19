@@ -1,0 +1,20 @@
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: {{ include "aptly.fullname" . }}-http
+  labels:
+    {{- include "aptly.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - name: {{ .Values.httproute.gatewayName | default "gateway" }}
+      namespace: {{ .Values.httproute.gatewayNamespace | default .Release.Namespace }}
+  hostnames:
+    - {{ .Values.httproute.host | quote }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: "/"
+      backendRefs:
+        - name: {{ include "aptly.fullname" . }}-public
+          port: {{ .Values.publicService.port }}

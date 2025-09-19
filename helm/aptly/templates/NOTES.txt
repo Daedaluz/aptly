@@ -1,0 +1,44 @@
+Thank you for installing the Aptly Helm chart!
+
+Access Information:
+-------------------
+
+API Service:
+  - Port: 8080 (internal)
+  - HTTPRoute: If using Gateway API, your API will be available at:
+      http(s)://<your-domain>/api
+
+Public Files (GPG key, etc):
+  - Port: 80 (internal)
+  - HTTPRoute: If using Gateway API, your public files will be available at:
+      http(s)://<your-domain>/public
+
+To port-forward locally (API):
+  export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "aptly.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:8080
+  # Then access: http://127.0.0.1:8080/api
+
+To port-forward locally (Public):
+  export PUBLIC_POD=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "component=public,app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+  kubectl --namespace {{ .Release.Namespace }} port-forward $PUBLIC_POD 8081:80
+  # Then access: http://127.0.0.1:8081/
+
+If using Gateway API, make sure your Gateway and HTTPRoute resources are configured and ready.
+
+Repository Usage:
+-----------------
+
+To add the Aptly repository to your system, first download the public GPG key:
+
+  curl -fsSL http(s)://<your-domain>/public/aptly-signing-key.asc -o /usr/share/keyrings/aptly-archive-keyring.gpg
+
+Then add the repository to your sources list (replace <your-domain> and <repo> as needed):
+
+  echo "deb [signed-by=/usr/share/keyrings/aptly-archive-keyring.gpg] http(s)://<your-domain>/public <repo> main" | sudo tee /etc/apt/sources.list.d/aptly.list
+
+Update and install packages as usual:
+
+  sudo apt update
+  sudo apt install <your-package>
+
+For more details, see the chart README or documentation.
