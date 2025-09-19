@@ -13,3 +13,4 @@ spec:
       name: api
   selector:
     {{- include "aptly.selectorLabels" . | nindent 4 }}
+    component: api

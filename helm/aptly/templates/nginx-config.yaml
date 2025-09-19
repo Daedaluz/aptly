@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aptly.fullname" . }}-nginx
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name _;
+
+        root /www;
+        autoindex on;              # enables directory listing
+        autoindex_exact_size off;  # optional: show human-readable file sizes
+        autoindex_localtime on;    # optional: show file modification times
+    }

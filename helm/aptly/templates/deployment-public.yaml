@@ -5,7 +5,12 @@ metadata:
   labels:
     {{- include "aptly.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
   selector:
     matchLabels:
       {{- include "aptly.selectorLabels" . | nindent 6 }}
@@ -19,13 +24,25 @@ spec:
       containers:
         - name: nginx
           image: nginx:alpine
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
           ports:
             - containerPort: 80
           volumeMounts:
             - name: data
-              mountPath: /usr/share/nginx/html
+              mountPath: /www
               subPath: public
+            - name: nginx-config
+              mountPath: /etc/nginx/conf.d/default.conf
+              subPath: default.conf
       volumes:
         - name: data
           persistentVolumeClaim:
             claimName: {{ include "aptly.fullname" . }}-data
+        - name: nginx-config
+          configMap:
+            name: {{ include "aptly.fullname" . }}-nginx
+      securityContext:
+        readOnlyRootFilesystem: true
+        fsGroup: 101

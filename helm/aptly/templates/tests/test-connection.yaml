@@ -11,5 +11,5 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      args: ['{{ include "aptly.fullname" . }}:{{ .Values.service.port }}']
+      args: ['{{ include "aptly.fullname" . }}:{{ .Values.apiService.port }}']
   restartPolicy: Never
