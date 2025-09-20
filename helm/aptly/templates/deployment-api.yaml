@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "aptly.fullname" . }}
+  name: {{ include "aptly.fullname" . }}-api
   labels:
     {{- include "aptly.labels" . | nindent 4 }}
 spec:
@@ -32,7 +32,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ .Chart.Name }}-api
           {{- with .Values.securityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}
