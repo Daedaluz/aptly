@@ -7,10 +7,6 @@ GPG_KEY_COMMENT="${GPG_KEY_COMMENT:-Aptly Default Signing Key}" # Default commen
 PUBLIC_DIR="/data/public"
 
 mkdir -p "$GNUPGHOME" "$PUBLIC_DIR"
-mkdir -p /data/public/apt/stable
-mkdir -p /data/public/apt/staging
-mkdir -p /data/public/apt/nightly
-
 chmod 700 "$GNUPGHOME"
 
 # Check if a secret key for the email already exists, or import from GPG_KEY if provided
@@ -38,7 +34,7 @@ else
 fi
 
 # Export the armoured public key for download
-PUBKEY_FILE="$PUBLIC_DIR/aptly-signing-key.asc"
+PUBKEY_FILE="$PUBLIC_DIR/signing-key.asc"
 gpg --homedir "$GNUPGHOME" --armor --export "$GPG_KEY_EMAIL" > "$PUBKEY_FILE"
 echo "[entrypoint] Exported public key to $PUBKEY_FILE"
-exec aptly api serve -config /etc/aptly/aptly.yml
+exec aptly api serve -config /etc/aptly.conf

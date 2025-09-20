@@ -1,4 +1,4 @@
-root_dir: /data/aptly
+root_dir: /data/
 log_level: info
 log_format: json
 database_open_attempts: -1
@@ -29,16 +29,7 @@ gpg_disable_sign: false
 gpg_disable_verify: false
 skip_contents_publishing: false
 skip_bz2_publishing: false
-filesystem_publish_endpoints:
-    stable:
-        rootDir: /data/public/apt/stable
-        linkMethod: hardlink
-    staging:
-        rootDir: /data/public/apt/staging
-        linkMethod: hardlink
-    nightly:
-        rootDir: /data/public/apt/nightly
-        linkMethod: hardlink
+filesystem_publish_endpoints: {}
 s3_publish_endpoints: {}
 swift_publish_endpoints: {}
 azure_publish_endpoints: {}
