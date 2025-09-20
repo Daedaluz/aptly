@@ -8,8 +8,6 @@ API Service:
 
 Public Files (GPG key, etc):
   - Port: 80 (internal)
-  - HTTPRoute: If using Gateway API, your public files will be available at:
-      http(s)://{{ .Values.httpRoute.host }}
 
 To port-forward locally (API):
   export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "aptly.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
@@ -28,11 +26,11 @@ Repository Usage:
 
 To add the Aptly repository to your system, first download the public GPG key:
 
-  curl -fsSL http(s)://{{ .Values.httpRoute.host }}/public/aptly-signing-key.asc -o /usr/share/keyrings/aptly-archive-keyring.gpg
+  curl -fsSL http(s)://{{ .Values.httpRoute.host }}/signing-key.asc -o /usr/share/keyrings/archive-keyring.gpg
 
 Then add the repository to your sources list (replace <repo> as needed):
 
-  echo "deb [signed-by=/usr/share/keyrings/aptly-archive-keyring.gpg] http(s)://{{ .Values.httpRoute.host }}/public <repo> main" | sudo tee /etc/apt/sources.list.d/aptly.list
+  echo "deb [signed-by=/usr/share/keyrings/archive-keyring.gpg] http(s)://{{ .Values.httpRoute.host }}/public <repo> main" | sudo tee /etc/apt/sources.list.d/aptly.list
 
 Update and install packages as usual:
 
