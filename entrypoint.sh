@@ -34,7 +34,8 @@ else
 fi
 
 # Export the armoured public key for download
-PUBKEY_FILE="$PUBLIC_DIR/signing-key.asc"
-gpg --homedir "$GNUPGHOME" --armor --export "$GPG_KEY_EMAIL" > "$PUBKEY_FILE"
-echo "[entrypoint] Exported public key to $PUBKEY_FILE"
+PUBKEY_FILE="$PUBLIC_DIR/signing-key"
+gpg --homedir "$GNUPGHOME" --export "$GPG_KEY_EMAIL" > "$PUBKEY_FILE.gpg"
+gpg --homedir "$GNUPGHOME" --armor --export "$GPG_KEY_EMAIL" > "$PUBKEY_FILE.asc"
+echo "[entrypoint] Exported public key to $PUBKEY_FILE".{gpg,asc}
 exec aptly api serve -config /etc/aptly.conf
