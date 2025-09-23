@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+set -o pipefail
+
+# Create payload with jq
+payload=$(jq -n \
+    --arg repo "$1" \
+    --arg distribution "$2" \
+    --arg component "$3" \
+    '{"SourceKind":"local", "Sources": [{"Name":$repo, "Component": $component}], "Distribution": $distribution}')
+
+# Publish a repo via API call
+curl -X POST -H "Content-Type: application/json" http://localhost:8081/api/publish -d "$payload" | jq

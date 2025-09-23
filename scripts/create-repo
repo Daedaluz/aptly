@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+set -o pipefail
+# create payload with jq
+payload=$(jq -n \
+  --arg name "$1" \
+  --arg distribution "$2" \
+  --arg component "$3" \
+  '{Name: $name, DefaultDistribution: $distribution, DefaultComponent: $component}')
+
+# Create aptly repo via API call
+curl -X POST -H "Content-Type: application/json" -d "$payload" http://localhost:8081/api/repos
+echo "Created repo $1 with distribution $2 and component $3"

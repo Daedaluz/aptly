@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:trixie-slim AS aptly-api
 ENV GNUPGHOME=/data/.gnupg
 RUN apt update && apt install -y aptly
 ADD /etc/aptly.yml /etc/aptly.conf

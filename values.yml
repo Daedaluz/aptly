@@ -1,0 +1,9 @@
+httpRoute:
+  enabled: true
+  host: "deb.inits.se"
+  gatewayName: "www"
+  gatewayNamespace: "ingress"
+  gatewaySectionName: "https"
+image:
+  tag: "latest"
+  pullPolicy: Always
